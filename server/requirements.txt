@@ -1,3 +1,9 @@
 fastapi
 uvicorn[standard]
 python-multipart
+pytesseract
+opencv-python
+Pillow
+timm
+einops
+numpy
