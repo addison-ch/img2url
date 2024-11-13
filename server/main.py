@@ -142,6 +142,9 @@ async def upload_image(file: UploadFile = File(...), type: str = Form(...)):
             if type == 'url':
                 urls = extract_urls(extracted_text)
                 valid_urls = validate_urls(urls)
+                if len(valid_urls) == 0:
+                    return JSONResponse(content={"text": extracted_text, "error": "No valid URLs found."})
+                print("Valid URLs:", valid_urls)
                 return JSONResponse(content={
                     "urls": valid_urls
                 })

@@ -18,25 +18,32 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
 .card {
   padding: 2em;
 }
 
 .read-the-docs {
   color: #888;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+body {
+  font-family: 'Funnel Sans', sans-serif;
+  background-color: #f8f8f8;
+  color: #333;
+  background-image: url('./src/assets/background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  margin: 0;
+  padding: 0;
+}
+
+.box {
+  background-color: #e1e1e15d;
+  border-radius: 0.5em;
+  box-shadow: 0 0 1em #0003;
+  padding: 2em;
+  margin: 2em auto;
+  max-width: 30em;
 }

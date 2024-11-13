@@ -1,80 +1,119 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import Axios
+import React, { useState } from 'react';
+import axios from 'axios';
+import './App.css';
 
 function App() {
-  const [imageFile, setImageFile] = useState(null);
-  const [apiResponse, setApiResponse] = useState(null);
-  const [error, setError] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [option, setOption] = useState('');
+  const [result, setResult] = useState('');
+  const [error, setError] = useState('');
 
-  // Handle file selection from the computer
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setError(null); // Clear previous errors
-    }
+    setSelectedFile(event.target.files[0]);
   };
 
-  // Handle image paste from the clipboard
-  const handlePaste = (event) => {
-    const items = event.clipboardData.items;
-    for (let item of items) {
-      if (item.type.indexOf('image') !== -1) {
-        const blob = item.getAsFile();
-        setImageFile(blob);
-        setError(null); // Clear previous errors
-        break;
-      }
-    }
+  const handleOptionChange = (event) => {
+    setOption(event.target.value);
   };
 
-  // Send the image to the API when imageFile changes
-  useEffect(() => {
-    if (imageFile) {
-      const formData = new FormData();
-      formData.append('file', imageFile);
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-      // Use Axios to send the form data as multipart/form-data
-      axios.post('http://localhost:8000/upload', formData, {
+    if (!selectedFile) {
+      alert('Please select a file to upload.');
+      return;
+    }
+    if (!option) {
+      alert('Please select an option.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('type', option);
+
+    axios
+      .post('http://localhost:8000/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       })
-        .then((response) => {
-          setApiResponse(response.data);
-          setError(null); // Clear previous errors
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-          setError('Failed to upload image. Please try again.');
-        });
-    }
-  }, [imageFile]);
-
-  // Add event listener for paste events
-  useEffect(() => {
-    window.addEventListener('paste', handlePaste);
-    return () => {
-      window.removeEventListener('paste', handlePaste);
-    };
-  }, []);
+      .then((response) => {
+        console.log(response)
+        if (response.data.text) {
+          setResult(response.data.text);
+        }
+        
+        if (response.data.error) {
+          setError(response.data.error);
+        } else {
+          setError('');
+        }
+        
+        if (response.data.urls) {
+          window.location.href = response.data.urls[0];
+        }
+      })
+      .catch((error) => {
+        console.error('There was an error uploading the file!', error);
+        setResult('Error uploading file.');
+      });
+  };
 
   return (
-    <div>
-      <h1>Image Upload App</h1>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
-      <p>Or paste an image from the clipboard.</p>
-
-      {/* Display error message */}
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-
-      {/* Display API response */}
-      {apiResponse && (
+    <div className='box'>
+      <h1>img2url</h1>
+      <form onSubmit={handleSubmit}>
         <div>
-          <h2>API Response:</h2>
-          <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
+          <label>
+            <input type="file" onChange={handleFileChange} />
+          </label>
         </div>
-      )}
+
+        <div style={{ marginTop: '20px' }}>
+          <label>Select an option:</label>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="text"
+                checked={option === 'text'}
+                onChange={handleOptionChange}
+              />
+              Extract Text
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="radio"
+                value="url"
+                checked={option === 'url'}
+                onChange={handleOptionChange}
+              />
+              Visit URL
+            </label>
+          </div>
+        </div>
+
+        <button type="submit" style={{ marginTop: '20px' }}>
+          Submit
+        </button>
+      </form>
+
+      {error && <div style={{ color: 'red', marginTop: '20px' }}>{error}</div>}
+
+    {result && (
+      <div style={{ marginTop: '20px' }}>
+        <label>Output:</label>
+        <textarea
+          value={result}
+          readOnly
+          rows="10"
+          cols="80"
+          style={{ width: '100%' }}
+        />
+      </div>)}
     </div>
   );
 }
