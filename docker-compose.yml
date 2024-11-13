@@ -2,23 +2,28 @@ version: '3.8'
 
 services:
   client:
-    build:
-      context: ./client
-      args:
-        VITE_API_BASE_URL: http://backend:8000
+    image: img2url-client
+    container_name: img2url-client
+    build: 
+      context: ./client  # or ./frontend depending on your folder structure
+    networks:
+      - app-network
     ports:
-      - "80:80"
+      - "80:80"  # Map host port 3000 to container port 80
     depends_on:
       - server
-    networks:
-      - app-network
 
   server:
-    build: ./server
-    ports:
-      - "8000:8000"
+    image: img2url-server
+    container_name: img2url-server
+    build:
+      context: ./server  # or ./backend depending on your folder structure
     networks:
       - app-network
+    ports:
+      - "8000:8000"  # Map host port 8000 to container port 8000
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
 
 networks:
   app-network:

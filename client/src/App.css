@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -26,12 +29,11 @@
   color: #888;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 body {
   font-family: 'Funnel Sans', sans-serif;
   background-color: #f8f8f8;
   color: #333;
-  background-image: url('./src/assets/background.png');
+  background-image: url('/background.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

@@ -17,11 +17,12 @@ app = FastAPI()
 
 origins = [
     "http://localhost",
+    "http://localhost:3000",
     "http://localhost:80",
     "http://localhost:5173",
     "http://127.0.0.1",
     "http://127.0.0.1:80",
-    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000",
 ]
 valid_req_types = {"text", "url"}
 
@@ -88,9 +89,9 @@ def extract_urls(text):
     """
     # Define the regex pattern for URLs
     url_pattern = re.compile(
-        r'(https?://\S+|www\.\S+)',
-        re.IGNORECASE
-    )
+    r'\b(?:https?://|www\.)?(?!.*@)\w[\w.-]+\.\w{2,}(?:\.\w{2,})?(?:/[\w./?%&=-]*)?',
+    re.IGNORECASE
+)
     
     # Find all URLs using the regex pattern
     urls = re.findall(url_pattern, text)
@@ -113,6 +114,8 @@ def validate_urls(urls):
     headers = {'User-Agent': 'Mozilla/5.0'}  # To mimic a real browser request
 
     for url in urls:
+        if 'http' not in url:
+            url = 'https://' + url
         try:
             response = requests.get(url, headers=headers, timeout=10)
             if response.status_code == 200:
@@ -141,6 +144,7 @@ async def upload_image(file: UploadFile = File(...), type: str = Form(...)):
 
             if type == 'url':
                 urls = extract_urls(extracted_text)
+                print(urls)
                 valid_urls = validate_urls(urls)
                 if len(valid_urls) == 0:
                     return JSONResponse(content={"text": extracted_text, "error": "No valid URLs found."})
