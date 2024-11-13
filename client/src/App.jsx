@@ -33,7 +33,7 @@ function App() {
     formData.append('type', option);
 
     axios
-      .post('http://localhost:8000/upload', formData, {
+      .post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
