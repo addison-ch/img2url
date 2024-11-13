@@ -1,6 +1,8 @@
 ### img2url
 
-Paste or upload and image, instantly redirect to URL if available. I built this because I got tired of people sending me screenshots of their URLs 😭. Other use cases may include when they handwrite you a URL, you took a picture of a URL, or you are screenshotting from a YouTube video.
+Upload an image and instantly redirect to URL if available. Tired of people sending you screenshots of URLs? Now you have a solution! Other use cases may include when they handwrite you a URL, you took a picture of a URL, or you are screenshotting from a YouTube video. 
+
+Also serves as a general purpose text extraction tool. Built on top of Tesseract.
 
 
 #### Todo List
