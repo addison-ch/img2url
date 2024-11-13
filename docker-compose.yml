@@ -10,9 +10,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./client:/app
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - app-network
     depends_on:
