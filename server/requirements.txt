@@ -4,6 +4,5 @@ python-multipart
 pytesseract
 opencv-python
 Pillow
-timm
-einops
+requests
 numpy
