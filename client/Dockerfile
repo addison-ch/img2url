@@ -21,7 +21,7 @@ FROM nginx:alpine
 # Copy built assets from build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Copy nginx config
+# Copy nginx config from the client directory
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Expose ports
